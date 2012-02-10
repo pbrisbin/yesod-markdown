@@ -38,12 +38,15 @@ module Yesod.Markdown
 #define HAMLET $hamlet
 #endif
 
-import Yesod
+import Yesod.Form (ToField(..), areq, aopt)
+import Yesod.Core (RenderMessage, SomeMessage(..))
 import Yesod.Form.Types
+import Yesod.Widget (addHamlet)
+import Text.Hamlet (hamlet, Html)
+import Database.Persist (PersistField)
 
 import Text.Blaze (preEscapedString, preEscapedText)
 import Text.Pandoc
-import Text.Pandoc.Shared
 import Text.HTML.SanitizeXSS (sanitizeBalance)
 
 import Data.Monoid      (Monoid)
