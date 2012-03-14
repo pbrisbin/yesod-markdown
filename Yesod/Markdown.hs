@@ -1,4 +1,3 @@
-{-# LANGUAGE CPP                        #-}
 {-# LANGUAGE QuasiQuotes                #-}
 {-# LANGUAGE TypeFamilies               #-}
 {-# LANGUAGE OverloadedStrings          #-}
@@ -32,12 +31,6 @@ module Yesod.Markdown
   )
   where
 
-#if __GLASGOW_HASKELL__ >= 700
-#define HAMLET hamlet
-#else
-#define HAMLET $hamlet
-#endif
-
 import Yesod.Form (ToField(..), areq, aopt)
 import Yesod.Core (RenderMessage, SomeMessage(..))
 import Yesod.Form.Types
@@ -68,7 +61,7 @@ markdownField :: RenderMessage master FormMessage => Field sub master Markdown
 markdownField = Field
     { fieldParse = blank $ Right . Markdown . unlines . lines' . T.unpack
     , fieldView  = \theId name theClass val _isReq -> addHamlet
-        [HAMLET|\
+        [hamlet|
 <textarea id="#{theId}" name="#{name}" :not (null theClass):class="#{T.intercalate " " theClass}">#{either id unMarkdown val}
 |]
      }
