@@ -34,7 +34,7 @@ module Yesod.Markdown
 import Yesod.Form (ToField(..), areq, aopt)
 import Yesod.Core (RenderMessage, SomeMessage(..))
 import Yesod.Form.Types
-import Yesod.Widget (addHamlet)
+import Yesod.Widget (toWidget)
 import Text.Hamlet (hamlet, Html)
 import Database.Persist (PersistField)
 
@@ -60,9 +60,9 @@ instance ToField (Maybe Markdown) master where
 markdownField :: RenderMessage master FormMessage => Field sub master Markdown
 markdownField = Field
     { fieldParse = blank $ Right . Markdown . unlines . lines' . T.unpack
-    , fieldView  = \theId name theClass val _isReq -> addHamlet
+    , fieldView  = \theId name attrs val _isReq -> toWidget
         [hamlet|
-<textarea id="#{theId}" name="#{name}" :not (null theClass):class="#{T.intercalate " " theClass}">#{either id unMarkdown val}
+<textarea id="#{theId}" name="#{name}" *{attrs}>#{either id unMarkdown val}
 |]
      }
 
