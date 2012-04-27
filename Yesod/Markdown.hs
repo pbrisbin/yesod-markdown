@@ -38,7 +38,7 @@ import Yesod.Widget (toWidget)
 import Text.Hamlet (hamlet, Html)
 import Database.Persist (PersistField)
 
-import Text.Blaze (preEscapedString, preEscapedText)
+import Text.Blaze.Html (preEscapedToMarkup)
 import Text.Pandoc
 import Text.HTML.SanitizeXSS (sanitizeBalance)
 
@@ -110,11 +110,11 @@ markdownFromFile f = do
 
 -- | Converts the intermediate Pandoc type to Html. Sanitizes HTML.
 writePandoc :: WriterOptions -> Pandoc -> Html
-writePandoc wo = preEscapedText . sanitizeBalance . T.pack . writeHtmlString wo
+writePandoc wo = preEscapedToMarkup . sanitizeBalance . T.pack . writeHtmlString wo
 
 -- | Skips the sanitization and its required conversion to Text
 writePandocTrusted :: WriterOptions -> Pandoc -> Html
-writePandocTrusted wo = preEscapedString . writeHtmlString wo
+writePandocTrusted wo = preEscapedToMarkup . writeHtmlString wo
 
 -- | Parses Markdown into the intermediate Pandoc type
 parseMarkdown :: ParserState -> Markdown -> Pandoc
