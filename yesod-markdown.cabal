@@ -17,7 +17,7 @@ library
   build-depends: base            >= 4     && < 5
                , text            >= 0.11  && < 0.12
                , pandoc          >= 1.9   && < 1.10
-               , blaze-html      >= 0.4   && < 0.5
+               , blaze-html      >= 0.4   && < 0.6
                , xss-sanitize    >= 0.3.1 && < 0.4
                , directory
                , yesod-core      >= 1.0   && < 1.1
