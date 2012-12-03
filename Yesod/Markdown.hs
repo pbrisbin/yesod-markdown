@@ -5,6 +5,7 @@
 {-# LANGUAGE FlexibleInstances          #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE OverlappingInstances       #-}
 -------------------------------------------------------------------------------
 -- |
 --
@@ -28,14 +29,17 @@ module Yesod.Markdown
   , yesodDefaultParserState
   -- * Form helper
   , markdownField
+  , YesodMarkdown(..)
   )
   where
 
 import Yesod.Form (ToField(..), areq, aopt)
 import Yesod.Core (RenderMessage, SomeMessage(..))
 import Yesod.Form.Types
+import Yesod.Routes.Class (Route)
 import Yesod.Widget (toWidget)
 import Text.Hamlet (hamlet, Html)
+import Text.Cassius (cassius)
 import Database.Persist (PersistField)
 
 import Text.Blaze.Html (preEscapedToMarkup)
@@ -48,8 +52,13 @@ import System.Directory (doesFileExist)
 
 import qualified Data.Text as T
 
+class YesodMarkdown app where
+    markdownTutorialRoute :: app -> Route app
+
 newtype Markdown = Markdown String
     deriving (Eq, Ord, Show, Read, PersistField, IsString, Monoid)
+
+{-
 
 instance ToField Markdown master where
     toField = areq markdownField
@@ -57,15 +66,36 @@ instance ToField Markdown master where
 instance ToField (Maybe Markdown) master where
     toField = aopt markdownField
 
-markdownField :: RenderMessage master FormMessage => Field sub master Markdown
-markdownField = Field
+-}
+
+
+markdownField :: (YesodMarkdown master, RenderMessage master FormMessage) => master -> Field sub master Markdown
+markdownField app = Field
     { fieldParse = \values _ -> blank (Right . Markdown . unlines . lines' . T.unpack) values
-    , fieldView  = \theId name attrs val _isReq -> toWidget
-        [hamlet|$newline never
-<textarea id="#{theId}" name="#{name}" *{attrs}>#{either id unMarkdown val}
-|]
-     , fieldEnctype = UrlEncoded
-     }
+    , fieldView  = \theId name attrs val _isReq -> do
+        toWidget
+            [hamlet|$newline never
+            <div .markdown_wrapper>
+                <textarea .markdown_field id="#{theId}" name="#{name}" *{attrs}>#{either id unMarkdown val}
+                <div .markdown_label>
+                    <a href="@{markdownTutorialRoute app}">
+                        Markdown syntax
+            |]
+        toWidget
+            [cassius|
+            .markdown_field
+                padding-bottom : 1.2em
+
+            .markdown_label
+                position : relative
+                left : 0.8em
+                top : -2em
+                font-size : x-small
+                padding : 0
+                margin : 0
+            |]
+    , fieldEnctype = UrlEncoded
+    }
 
      where
         unMarkdown :: Markdown -> T.Text
