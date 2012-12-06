@@ -34,7 +34,8 @@ module Yesod.Markdown
   where
 
 import Yesod.Form (ToField(..), areq, aopt)
-import Yesod.Core (RenderMessage, SomeMessage(..))
+import Yesod.Core (RenderMessage, SomeMessage(..), lift)
+import Yesod.Handler (getUrlRender)
 import Yesod.Form.Types
 import Yesod.Routes.Class (Route)
 import Yesod.Widget (toWidget)
@@ -53,34 +54,37 @@ import System.Directory (doesFileExist)
 import qualified Data.Text as T
 
 class YesodMarkdown app where
-    markdownTutorialRoute :: app -> Route app
+    markdownTutorial :: Either (Route app) T.Text
+    markdownTutorial = Right "http://daringfireball.net/projects/markdown/syntax"
 
 newtype Markdown = Markdown String
     deriving (Eq, Ord, Show, Read, PersistField, IsString, Monoid)
 
-{-
-
-instance ToField Markdown master where
+instance YesodMarkdown master => ToField Markdown master where
     toField = areq markdownField
 
-instance ToField (Maybe Markdown) master where
+instance YesodMarkdown master => ToField (Maybe Markdown) master where
     toField = aopt markdownField
 
--}
 
-
-markdownField :: (YesodMarkdown master, RenderMessage master FormMessage) => master -> Field sub master Markdown
-markdownField app = Field
+markdownField :: (YesodMarkdown master, RenderMessage master FormMessage) => Field sub master Markdown
+markdownField = Field
     { fieldParse = \values _ -> blank (Right . Markdown . unlines . lines' . T.unpack) values
     , fieldView  = \theId name attrs val _isReq -> do
+        render_route <- lift getUrlRender
+        let render (Left route) = render_route route
+            render (Right link) = link
+            tutorial_link = render markdownTutorial
+
         toWidget
             [hamlet|$newline never
             <div .markdown_wrapper>
                 <textarea .markdown_field id="#{theId}" name="#{name}" *{attrs}>#{either id unMarkdown val}
                 <div .markdown_label>
-                    <a href="@{markdownTutorialRoute app}">
+                    <a href="#{tutorial_link}">
                         Markdown syntax
             |]
+
         toWidget
             [cassius|
             .markdown_field
