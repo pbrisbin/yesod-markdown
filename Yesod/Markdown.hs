@@ -59,11 +59,12 @@ instance ToField (Maybe Markdown) master where
 
 markdownField :: RenderMessage master FormMessage => Field sub master Markdown
 markdownField = Field
-    { fieldParse = blank $ Right . Markdown . unlines . lines' . T.unpack
+    { fieldParse = \values _ -> blank (Right . Markdown . unlines . lines' . T.unpack) values
     , fieldView  = \theId name attrs val _isReq -> toWidget
         [hamlet|$newline never
 <textarea id="#{theId}" name="#{name}" *{attrs}>#{either id unMarkdown val}
 |]
+     , fieldEnctype = UrlEncoded
      }
 
      where
