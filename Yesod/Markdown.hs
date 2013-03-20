@@ -50,7 +50,7 @@ import Yesod.Core (RenderMessage)
 import Yesod.Form (ToField(..), areq, aopt)
 import Yesod.Form.Functions (parseHelper)
 import Yesod.Form.Types
-import Yesod.Widget (toWidget)
+import Yesod.Core.Widget (toWidget)
 
 import qualified Data.ByteString as B
 import qualified Data.Text       as T
