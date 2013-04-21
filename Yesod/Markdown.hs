@@ -46,11 +46,10 @@ import Text.HTML.SanitizeXSS (sanitizeBalance)
 import Text.Hamlet (hamlet, Html)
 import Text.Pandoc
 
-import Yesod.Core (RenderMessage)
-import Yesod.Form (ToField(..), areq, aopt)
+import Yesod.Core (RenderMessage, HandlerSite)
 import Yesod.Form.Functions (parseHelper)
 import Yesod.Form.Types
-import Yesod.Widget (toWidget)
+import Yesod.Core.Widget (toWidget)
 
 import qualified Data.ByteString as B
 import qualified Data.Text       as T
@@ -62,13 +61,7 @@ instance ToMarkup Markdown where
     -- | Sanitized by default
     toMarkup = markdownToHtml
 
-instance ToField Markdown master where
-    toField = areq markdownField
-
-instance ToField (Maybe Markdown) master where
-    toField = aopt markdownField
-
-markdownField :: RenderMessage master FormMessage => Field sub master Markdown
+markdownField :: Monad m => RenderMessage (HandlerSite m) FormMessage => Field m Markdown
 markdownField = Field
     { fieldParse = parseHelper $ Right . Markdown . T.filter (/= '\r')
     , fieldView  = \theId name attrs val _isReq -> toWidget
