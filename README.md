@@ -1,18 +1,9 @@
-# Yesod markdown
+# Yesod Markdown
 
-[![Build Status](https://travis-ci.org/pbrisbin/yesod-markdown.svg?branch=master)](https://travis-ci.org/pbrisbin/yesod-markdown)
+A small wrapper over [Pandoc][]'s powerful `Markdown -> Html` support, with
+usage tailored for Yesod.
 
-A small wrapper over pandoc's powerful `Markdown -> Html` support with usage
-tailored for Yesod.
-
-This is a fork and continuation of a package originally by Alexander Dunlap.
-
-Differences include:
-
-1. Updated to compile with newer dependencies
-2. Removed `Yesod.Markdown.Macros`
-3. Fixed and exported form field settings for `Markdown` fields
-4. Uses xss-sanitize by default and provides `*Trusted` functions to skip it
+[pandoc]: http://hackage.haskell.org/package/pandoc
 
 ## Usage
 
@@ -27,3 +18,18 @@ getPageR fp = do
                 #{content}
             |]
 ```
+
+For more information, see the [haddocks][].
+
+[haddocks]: http://hackage.haskell.org/package/yesod-markdown/docs/Yesod-Markdown.html
+
+## Developing & Tests
+
+```
+stack setup
+stack build --pedantic --test
+```
+
+---
+
+[CHANGELOG](./CHANGELOG.md) | [LICENSE](./LICENSE)
