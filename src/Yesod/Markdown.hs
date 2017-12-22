@@ -27,6 +27,7 @@ module Yesod.Markdown
   -- * Option sets
   , yesodDefaultWriterOptions
   , yesodDefaultReaderOptions
+  , yesodDefaultExtensions
   -- * Form helper
   , markdownField
   )
@@ -50,7 +51,6 @@ import Text.Blaze.Html (preEscapedToMarkup)
 import Text.HTML.SanitizeXSS (sanitizeBalance)
 import Text.Hamlet (hamlet, Html)
 import Text.Pandoc
-import Text.Pandoc.Error
 
 import Yesod.Core (RenderMessage, HandlerSite)
 import Yesod.Form.Functions (parseHelper)
@@ -68,7 +68,7 @@ instance PersistFieldSql Markdown where
 
 instance ToMarkup Markdown where
     -- | Sanitized by default
-    toMarkup = handleError . markdownToHtml
+    toMarkup = handleErr . markdownToHtml
 
 markdownField :: Monad m => RenderMessage (HandlerSite m) FormMessage => Field m Markdown
 markdownField = Field
@@ -81,13 +81,15 @@ markdownField = Field
     }
 
 markdownToHtml :: Markdown -> Either PandocError Html
-markdownToHtml = fmap (writePandoc yesodDefaultWriterOptions)
-               . parseMarkdown yesodDefaultReaderOptions
+markdownToHtml md = do
+  p <- parseMarkdown yesodDefaultReaderOptions md
+  writePandoc yesodDefaultWriterOptions p
 
 -- | No HTML sanitization
 markdownToHtmlTrusted :: Markdown -> Either PandocError Html
-markdownToHtmlTrusted = fmap (writePandocTrusted yesodDefaultWriterOptions)
-                      . parseMarkdown yesodDefaultReaderOptions
+markdownToHtmlTrusted md = do
+  p <- parseMarkdown yesodDefaultReaderOptions md
+  writePandocTrusted yesodDefaultWriterOptions p
 
 -- | Returns the empty string if the file does not exist
 markdownFromFile :: FilePath -> IO Markdown
@@ -106,26 +108,40 @@ markdownFromFile f = do
             bs <- B.readFile fp
             return $ decodeUtf8With lenientDecode bs
 
-writePandoc :: WriterOptions -> Pandoc -> Html
-writePandoc wo = preEscapedToMarkup . sanitizeBalance . T.pack . writeHtmlString wo
+writePandoc :: WriterOptions -> Pandoc -> Either PandocError Html
+writePandoc wo p = preEscapedToMarkup . sanitizeBalance <$> writeHTML wo p
 
-writePandocTrusted :: WriterOptions -> Pandoc -> Html
-writePandocTrusted wo = preEscapedToMarkup . writeHtmlString wo
+writePandocTrusted :: WriterOptions -> Pandoc -> Either PandocError Html
+writePandocTrusted wo p = preEscapedToMarkup <$> writeHTML wo p
+
+writeHTML :: WriterOptions -> Pandoc -> Either PandocError Text
+writeHTML wo = runPure . writeHtml5String wo
 
 parseMarkdown :: ReaderOptions -> Markdown -> Either PandocError Pandoc
-parseMarkdown ro = readMarkdown ro . T.unpack . unMarkdown
+parseMarkdown ro = runPure . readMarkdown ro . unMarkdown
+
+handleErr :: Either PandocError a -> a
+handleErr = either (error . show) id
 
 -- | Defaults plus Html5, minus WrapText
 yesodDefaultWriterOptions :: WriterOptions
-yesodDefaultWriterOptions = def
-  { writerHtml5     = True
-  , writerWrapText  = WrapNone
-  , writerHighlight = True
-  }
+yesodDefaultWriterOptions =
+  def
+    { writerWrapText  = WrapNone
+    , writerExtensions = extensionsFromList yesodDefaultExtensions
+    }
 
 -- | Defaults plus Smart and ParseRaw
 yesodDefaultReaderOptions :: ReaderOptions
-yesodDefaultReaderOptions = def
-    { readerSmart    = True
-    , readerParseRaw = True
+yesodDefaultReaderOptions =
+  def
+    { readerExtensions = extensionsFromList yesodDefaultExtensions
     }
+
+-- | Default extensions used in 'yesodDefaultWriterOptions' and
+-- 'yesodDefaultReaderOptions'.
+yesodDefaultExtensions :: [Extension]
+yesodDefaultExtensions =
+  [ Ext_raw_html
+  , Ext_auto_identifiers
+  ]
