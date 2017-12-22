@@ -23,8 +23,7 @@ module Yesod.Markdown
   , yesodDefaultExtensions
   -- * Form helper
   , markdownField
-  )
-  where
+  ) where
 
 import Data.String (IsString)
 import Data.Text (Text)
@@ -68,14 +67,14 @@ markdownField = Field
 
 markdownToHtml :: Markdown -> Either PandocError Html
 markdownToHtml md = do
-  p <- parseMarkdown yesodDefaultReaderOptions md
-  writePandoc yesodDefaultWriterOptions p
+    p <- parseMarkdown yesodDefaultReaderOptions md
+    writePandoc yesodDefaultWriterOptions p
 
 -- | No HTML sanitization
 markdownToHtmlTrusted :: Markdown -> Either PandocError Html
 markdownToHtmlTrusted md = do
-  p <- parseMarkdown yesodDefaultReaderOptions md
-  writePandocTrusted yesodDefaultWriterOptions p
+    p <- parseMarkdown yesodDefaultReaderOptions md
+    writePandocTrusted yesodDefaultWriterOptions p
 
 -- | Returns the empty string if the file does not exist
 markdownFromFile :: FilePath -> IO Markdown
@@ -101,26 +100,25 @@ writeHTML wo = runPure . writeHtml5String wo
 parseMarkdown :: ReaderOptions -> Markdown -> Either PandocError Pandoc
 parseMarkdown ro = runPure . readMarkdown ro . unMarkdown
 
--- | Defaults plus Html5, minus WrapText
+-- | Defaults minus WrapText, plus our extensions
 yesodDefaultWriterOptions :: WriterOptions
 yesodDefaultWriterOptions = def
-    { writerWrapText  = WrapNone
+    { writerWrapText = WrapNone
     , writerExtensions = extensionsFromList yesodDefaultExtensions
     }
 
--- | Defaults plus Smart and ParseRaw
+-- | Defaults plus our extensions, see @'yesodDefaultExtensions'@
 yesodDefaultReaderOptions :: ReaderOptions
 yesodDefaultReaderOptions = def
     { readerExtensions = extensionsFromList yesodDefaultExtensions
     }
 
--- | Default extensions used in 'yesodDefaultWriterOptions' and
--- 'yesodDefaultReaderOptions'.
+-- | @raw_html@ and @auto_identifiers@
 yesodDefaultExtensions :: [Extension]
 yesodDefaultExtensions =
-  [ Ext_raw_html
-  , Ext_auto_identifiers
-  ]
+    [ Ext_raw_html
+    , Ext_auto_identifiers
+    ]
 
 -- | Unsafely handle a @'PandocError'@
 --
