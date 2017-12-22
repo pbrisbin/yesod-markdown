@@ -37,7 +37,7 @@ import Text.Blaze (ToMarkup(toMarkup))
 import Text.Blaze.Html (preEscapedToMarkup)
 import Text.Hamlet (Html, hamlet)
 import Text.HTML.SanitizeXSS (sanitizeBalance)
-import Text.Pandoc
+import Text.Pandoc hiding (handleError)
 import Yesod.Core (HandlerSite, RenderMessage)
 import Yesod.Core.Widget (toWidget)
 import Yesod.Form.Functions (parseHelper)
@@ -54,7 +54,7 @@ instance PersistFieldSql Markdown where
 
 instance ToMarkup Markdown where
     -- | Sanitized by default
-    toMarkup = handleErr . markdownToHtml
+    toMarkup = handleError . markdownToHtml
 
 markdownField :: Monad m => RenderMessage (HandlerSite m) FormMessage => Field m Markdown
 markdownField = Field
@@ -101,9 +101,6 @@ writeHTML wo = runPure . writeHtml5String wo
 parseMarkdown :: ReaderOptions -> Markdown -> Either PandocError Pandoc
 parseMarkdown ro = runPure . readMarkdown ro . unMarkdown
 
-handleErr :: Either PandocError a -> a
-handleErr = either (error . show) id
-
 -- | Defaults plus Html5, minus WrapText
 yesodDefaultWriterOptions :: WriterOptions
 yesodDefaultWriterOptions = def
@@ -124,3 +121,11 @@ yesodDefaultExtensions =
   [ Ext_raw_html
   , Ext_auto_identifiers
   ]
+
+-- | Unsafely handle a @'PandocError'@
+--
+-- This is analagous to pandoc-1 behavior, and is required in a pure context
+-- such as the @'ToMarkup'@ instance.
+--
+handleError :: Either PandocError a -> a
+handleError = either (error . show) id
