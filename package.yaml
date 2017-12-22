@@ -11,6 +11,8 @@ maintainer: Patrick Brisbin <pbrisbin@gmail.com>
 license: GPL-2
 github: pbrisbin/yesod-markdown
 homepage: http://github.com/pbrisbin/yesod-markdown
+extra-source-files:
+  - README.md
 
 dependencies:
   - base >=4.8.0 && <5
