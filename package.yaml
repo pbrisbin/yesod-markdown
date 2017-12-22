@@ -38,6 +38,7 @@ tests:
   test:
     main: Spec.hs
     source-dirs: test
+    ghc-options: -threaded
     dependencies:
       - yesod-markdown
       - hspec
