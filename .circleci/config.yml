@@ -1,20 +1,23 @@
 ---
 version: 2.0
 
-jobs:
-  build:
+references:
+  stack_build: &stack_build
     docker:
-      - image: fpco/stack-build:lts-9.18
+      - image: fpco/stack-build:lts
     steps:
       - checkout
+      - run:
+          name: Digest
+          command: |
+            echo -- "$STACK_ARGUMENTS" > rdigest
+            git ls-files | xargs md5sum > sdigest
       - restore_cache:
           keys:
-            - stack-{{ .Branch }}-{{ checksum "stack.yaml" }}
-            - stack-{{ .Branch }}
-            - stack-
-      - run:
-          name: Upgrade Stack
-          command: stack upgrade
+            - 1-{{ .Branch }}-{{ checksum "rdigest" }}-{{ checksum "sdigest" }}
+            - 1-{{ .Branch }}-{{ checksum "rdigest" }}-
+            - 1-{{ .Branch }}-
+            - 1-master-
       - run:
           name: Dependencies
           command: make setup
@@ -22,7 +25,7 @@ jobs:
           name: Build
           command: make build
       - save_cache:
-          key: stack-{{ .Branch }}-{{ checksum "stack.yaml" }}
+          key: 1-{{ .Branch }}-{{ checksum "rdigest" }}-{{ checksum "sdigest" }}
           paths:
             - ~/.stack
             - ./.stack-work
@@ -32,3 +35,28 @@ jobs:
       - run:
           name: Lint
           command: make lint
+
+jobs:
+  build_8.0.2:
+    <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --stack-yaml stack-lts-9.21.yaml
+  build_8.2.2:
+    <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --resolver lts-10.3
+  build:
+    <<: *stack_build
+  build_nightly:
+    <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --resolver nightly
+
+workflows:
+  version: 2
+  builds:
+    jobs:
+      - build_8.0.2
+      - build_8.2.2
+      - build
+      - build_nightly
