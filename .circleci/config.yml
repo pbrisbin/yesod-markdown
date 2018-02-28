@@ -34,12 +34,19 @@ references:
           command: make test
       - run:
           name: Lint
-          command: make lint
+          command: |
+            if [ "${LINT:-1}" -eq 0 ]; then
+              echo "Skipping lint (LINT=0)" >&2
+              exit 0
+            fi
+
+            make lint
 
 jobs:
   build_8.0.2:
     <<: *stack_build
     environment:
+      LINT: 0  # https://circleci.com/gh/pbrisbin/yesod-markdown/73
       STACK_ARGUMENTS: --stack-yaml stack-lts-9.21.yaml
   build_8.2.2:
     <<: *stack_build
