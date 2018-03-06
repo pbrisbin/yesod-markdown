@@ -54,10 +54,15 @@ jobs:
       STACK_ARGUMENTS: --resolver lts-10.3
   build:
     <<: *stack_build
+
+  # Nightly is special: no caching. You'd be surprised how hard it is to
+  # accomplish that while re-using the *stack_build reference.
   build_nightly:
-    <<: *stack_build
-    environment:
-      STACK_ARGUMENTS: --resolver nightly
+    docker:
+      - image: fpco/stack-build:lts
+    steps:
+      - checkout
+      - run: make
 
 workflows:
   version: 2
