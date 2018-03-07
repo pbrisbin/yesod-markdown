@@ -7,12 +7,12 @@ usage tailored for Yesod.
 
 ## Usage
 
-```
+```haskell
 getPageR :: FilePath -> Handler RepHtml
 getPageR fp = do
     content <- liftIO $ fmap markdownToHtml (markdownFromFile fp)
 
-    defaultLayout do
+    defaultLayout $ do
         [shamlet|
             <div class="content">
                 #{content}
