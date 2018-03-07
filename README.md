@@ -19,6 +19,22 @@ getPageR fp = do
             |]
 ```
 
+We can specify which extension to use as follows:
+
+```haskell
+import Text.Pandoc.Extensions (githubMarkdownExtensions)
+
+getPageR :: FilePath -> Handler RepHtml
+getPageR fp = do
+    content <- liftIO $ fmap (markdownToHtmlWithExtensions githubMarkdownExtensions) (markdownFromFile fp)
+
+    defaultLayout $ do
+        [shamlet|
+            <div class="content">
+                #{content}
+            |]
+```
+
 For more information, see the [haddocks][].
 
 [haddocks]: http://hackage.haskell.org/package/yesod-markdown/docs/Yesod-Markdown.html
