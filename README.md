@@ -33,7 +33,7 @@ getPageR :: FilePath -> Handler RepHtml
 getPageR fp = do
     content <- liftIO
         $ fmap (markdownToHtmlWithExtensions githubMarkdownExtensions)
-        $ markdownFromFile fp)
+        $ markdownFromFile fp
 
     defaultLayout $ do
         [shamlet|
