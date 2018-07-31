@@ -49,7 +49,7 @@ import qualified Data.ByteString as B
 import qualified Data.Text as T
 
 newtype Markdown = Markdown { unMarkdown :: Text }
-    deriving (Eq, Ord, Show, Read, PersistField, IsString, Monoid)
+    deriving (Eq, Ord, Show, Read, PersistField, IsString, Monoid, Semigroup)
 
 instance PersistFieldSql Markdown where
     sqlType _ = SqlString
