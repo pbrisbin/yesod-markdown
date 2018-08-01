@@ -2,8 +2,8 @@ all: setup build test lint
 
 .PHONY: setup
 setup:
-	stack setup $(STACK_ARGUMENTS)
-	stack build $(STACK_ARGUMENTS) --dependencies-only --test --no-run-tests
+	stack setup $(STACK_ARGUMENTS) --no-terminal
+	stack build $(STACK_ARGUMENTS) --dependencies-only --test --no-run-tests --no-terminal
 	stack install $(STACK_ARGUMENTS) hlint weeder
 
 .PHONY: build

@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE ExplicitForAll #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE FlexibleInstances #-}
@@ -48,8 +49,12 @@ import Yesod.Form.Types
 import qualified Data.ByteString as B
 import qualified Data.Text as T
 
+#if !MIN_VERSION_base(4,11,0)
+import Data.Semigroup
+#endif
+
 newtype Markdown = Markdown { unMarkdown :: Text }
-    deriving (Eq, Ord, Show, Read, PersistField, IsString, Monoid)
+    deriving (Eq, Ord, Show, Read, PersistField, IsString, Monoid, Semigroup)
 
 instance PersistFieldSql Markdown where
     sqlType _ = SqlString
