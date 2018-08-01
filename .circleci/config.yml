@@ -49,11 +49,11 @@ jobs:
     <<: *stack_build
     environment:
       LINT: 0  # https://circleci.com/gh/pbrisbin/yesod-markdown/73
-      STACK_ARGUMENTS: --stack-yaml stack-lts-9.21.yaml
+      STACK_YAML: stack-lts-9.21.yaml
   build_8.2.2:
     <<: *stack_build
     environment:
-      STACK_ARGUMENTS: --resolver lts-11.19
+      STACK_YAML: stack-lts-11.19.yaml
   build:
     <<: *stack_build
 
