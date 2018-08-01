@@ -53,7 +53,7 @@ jobs:
   build_8.2.2:
     <<: *stack_build
     environment:
-      STACK_ARGUMENTS: --resolver lts-10.3
+      STACK_ARGUMENTS: --resolver lts-11.19
   build:
     <<: *stack_build
 
