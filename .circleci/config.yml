@@ -22,6 +22,7 @@ references:
       - run:
           name: Dependencies
           command: make setup
+          no_output_timeout: 120m
       - run:
           name: Build
           command: make build
@@ -63,7 +64,9 @@ jobs:
       - image: quay.io/haskell_works/stack-build-minimal
     steps:
       - checkout
-      - run: make
+      - run:
+          command: make
+          no_output_timeout: 120m
 
 workflows:
   version: 2
