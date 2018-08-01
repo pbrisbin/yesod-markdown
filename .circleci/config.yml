@@ -58,24 +58,28 @@ jobs:
     <<: *stack_build
     environment:
       STACK_ARGUMENTS: --no-terminal
-
-  # Nightly is special: no caching. You'd be surprised how hard it is to
-  # accomplish that while re-using the *stack_build reference.
   build_nightly:
-    docker:
-      - image: quay.io/haskell_works/stack-build-minimal
-    steps:
-      - checkout
-      - run:
-          command: make
-          no_output_timeout: 120m
+    <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --no-terminal --resolver nightly
+      STACK_YAML: stack-nightly.yaml
 
 workflows:
   version: 2
-  builds:
+  commit:
     jobs:
       - build_8.0.2
       - build_8.2.2
       - build_8.4.3
       - build
+      - build_nightly
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
       - build_nightly
