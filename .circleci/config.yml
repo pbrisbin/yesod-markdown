@@ -4,7 +4,8 @@ version: 2.0
 references:
   stack_build: &stack_build
     docker:
-      - image: fpco/stack-build:lts
+      # https://github.com/haskell-works/stack-build/blob/master/minimal/Dockerfile
+      - image: quay.io/haskell_works/stack-build-minimal
     steps:
       - checkout
       - run:
@@ -59,7 +60,7 @@ jobs:
   # accomplish that while re-using the *stack_build reference.
   build_nightly:
     docker:
-      - image: fpco/stack-build:lts
+      - image: quay.io/haskell_works/stack-build-minimal
     steps:
       - checkout
       - run: make
