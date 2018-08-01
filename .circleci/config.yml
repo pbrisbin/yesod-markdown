@@ -42,13 +42,17 @@ jobs:
   build_8.0.2:
     <<: *stack_build
     environment:
+      STACK_ARGUMENTS: --no-terminal
       STACK_YAML: stack-lts-9.21.yaml
   build_8.2.2:
     <<: *stack_build
     environment:
+      STACK_ARGUMENTS: --no-terminal
       STACK_YAML: stack-lts-11.19.yaml
   build:
     <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --no-terminal
 
   # Nightly is special: no caching. You'd be surprised how hard it is to
   # accomplish that while re-using the *stack_build reference.
