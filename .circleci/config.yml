@@ -42,7 +42,12 @@ references:
           command: make test
       - run:
           name: Lint
-          command: make lint
+          command: |
+            if [ "${LINT:-1}" = 1 ]; then
+              curl -L -o .hlint.yaml \
+                https://raw.githubusercontent.com/pbrisbin/dotfiles/master/hlint.yaml
+              make lint
+            fi
 
 jobs:
   build_8.0.2:
@@ -67,6 +72,9 @@ jobs:
   build_nightly:
     <<: *stack_build
     environment:
+      # weeder is not happy, again
+      # https://circleci.com/gh/pbrisbin/yesod-markdown/222
+      LINT: 0
       STACK_ARGUMENTS: --no-terminal --resolver nightly
       STACK_YAML: stack-nightly.yaml
 

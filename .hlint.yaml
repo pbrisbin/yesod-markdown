@@ -1,4 +1,0 @@
----
-- ignore:
-    name: Redundant do
-    within: spec
