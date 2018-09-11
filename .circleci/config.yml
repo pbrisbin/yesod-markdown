@@ -27,7 +27,12 @@ references:
             - v2-master-
       - run:
           name: Dependencies
-          command: make setup
+          command: |
+            if [ "${STACK_CLEAN:-0}" -eq 1 ]; then
+              stack clean --full
+            fi
+
+            make setup
           no_output_timeout: 120m
       - run:
           name: Build
@@ -76,6 +81,10 @@ jobs:
       # weeder is not happy, again
       # https://circleci.com/gh/pbrisbin/yesod-markdown/222
       LINT: 0
+      # Building nightly frequently fails if using cached artifacts. Something
+      # about the haddock-library internal dependency bug is not really fixed.
+      # https://circleci.com/gh/pbrisbin/yesod-markdown/246
+      STACK_CLEAN: 1
       STACK_ARGUMENTS: --no-terminal --resolver nightly
       STACK_YAML: stack-nightly.yaml
 
