@@ -14,7 +14,8 @@ main = hspec spec
 spec :: Spec
 spec = describe "Yesod.Markdown" $ do
     it "converts Markdown to sanitized HTML" $ do
-        let markdown = Markdown $ T.unlines
+        let
+            markdown = Markdown $ T.unlines
                 [ "# Title"
                 , ""
                 , "- one"
@@ -39,7 +40,8 @@ spec = describe "Yesod.Markdown" $ do
             ]
 
     it "converts Markdown to unsanitized HTML" $ do
-        let markdown = Markdown $ T.unlines
+        let
+            markdown = Markdown $ T.unlines
                 [ "# Title"
                 , ""
                 , "- one"
