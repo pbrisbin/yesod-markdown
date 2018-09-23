@@ -1,4 +1,3 @@
----
 version: 2.0
 
 references:
@@ -73,7 +72,7 @@ jobs:
     <<: *stack_build
     environment:
       STACK_ARGUMENTS: --no-terminal
-      STACK_YAML: stack-lts-12.2.yaml
+      STACK_YAML: stack-lts-12.10.yaml
   build:
     <<: *stack_build
     environment:
