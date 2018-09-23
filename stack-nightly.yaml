@@ -1,8 +1,6 @@
----
-# You can't use "nightly" here, only "nightly-<date>", apparently. But you
-# can't leave it blank either, so here's a value that we'll override by
-# --resolver nightly.
-resolver: lts-11.5
+# Date of last update, overridden on CI with --resolver
+resolver: nightly-2018-09-23
+
 extra-deps:
   - HsYAML-0.1.1.2
   - pandoc-2.2.2.1
