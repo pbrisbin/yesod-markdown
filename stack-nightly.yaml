@@ -3,7 +3,7 @@ resolver: nightly-2018-09-23
 
 extra-deps:
   - HsYAML-0.1.1.2
-  - pandoc-2.2.2.1
+  - pandoc-2.2.3.2
 
 # Sometimes necessary, sometimes problematic. Hopefully never both?
 #
