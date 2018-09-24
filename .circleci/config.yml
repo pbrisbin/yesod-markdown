@@ -27,13 +27,8 @@ references:
       - run:
           name: Dependencies
           command: |
-            if [ "${STACK_CLEAN:-0}" -eq 1 ]; then
-              # stack clean --full is not enough to combat the scourge that is
-              # this stupid effing haddock-library internal dependency bug.
-              # https://circleci.com/gh/pbrisbin/yesod-markdown/252
-              rm -rf ~/.stack ./.stack-work
-            fi
-
+            # https://github.com/commercialhaskell/stack/issues/4071
+            rm -rf ~/.stack/precompiled/x86_64-linux/*/*/haddock-library-*
             make setup
           no_output_timeout: 120m
       - run:
@@ -83,10 +78,6 @@ jobs:
       # weeder is not happy, again
       # https://circleci.com/gh/pbrisbin/yesod-markdown/222
       LINT: 0
-      # Building nightly frequently fails if using cached artifacts. Something
-      # about the haddock-library internal dependency bug is not really fixed.
-      # https://circleci.com/gh/pbrisbin/yesod-markdown/246
-      STACK_CLEAN: 1
       STACK_ARGUMENTS: --no-terminal --resolver nightly
       STACK_YAML: stack-nightly.yaml
 
