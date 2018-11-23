@@ -1,4 +1,3 @@
----
 name: yesod-markdown
 version: 0.12.4
 synopsis: Tools for using markdown in a yesod application
