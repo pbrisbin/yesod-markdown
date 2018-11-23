@@ -29,7 +29,12 @@ references:
           command: |
             # https://github.com/commercialhaskell/stack/issues/4071
             rm -rf ~/.stack/precompiled/x86_64-linux/*/*/haddock-library-*
-            make setup
+
+            if [ "${LINT:-1}" = 1 ]; then
+              make setup setup.lint
+            else
+              make setup
+            fi
           no_output_timeout: 120m
       - run:
           name: Build
@@ -89,14 +94,14 @@ workflows:
       - build_8.2.2
       - build_8.4.3
       - build
-      # - build_nightly
-  # nightly:
-  #   triggers:
-  #     - schedule:
-  #         cron: "0 0 * * *"
-  #         filters:
-  #           branches:
-  #             only:
-  #               - master
-  #   jobs:
-  #     - build_nightly
+      - build_nightly
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build_nightly
