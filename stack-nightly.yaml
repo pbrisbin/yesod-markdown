@@ -1,9 +1,5 @@
 # Date of last update, overridden on CI with --resolver
-resolver: nightly-2018-02-05
-
-extra-deps:
-  - ipynb-0.1
-  - pandoc-2.6
+resolver: nightly-2019-05-14
 
 # Sometimes necessary, sometimes problematic. Hopefully never both?
 #
