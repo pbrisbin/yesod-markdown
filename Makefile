@@ -28,3 +28,14 @@ test:
 lint:
 	stack exec $(STACK_ARGUMENTS) hlint .
 	stack exec $(STACK_ARGUMENTS) weeder .
+
+# NB. not used on CI, more for local validation
+.PHONY: nightly
+nightly:
+	stack setup --stack-yaml stack-nightly.yaml --resolver nightly
+	stack build --stack-yaml stack-nightly.yaml --resolver nightly \
+	  --test --no-run-tests --bench --no-run-benchmarks \
+	  --dependencies-only
+	stack build --stack-yaml stack-nightly.yaml --resolver nightly \
+	  --test --no-run-tests --bench --no-run-benchmarks \
+	  --fast --pedantic
