@@ -1,3 +1,4 @@
 resolver: lts-12.10
-ghc-options:
-  "$locals": -fhide-source-paths
+
+# Fix weeder with stack-2.0
+ghc-options: { "$locals": -ddump-to-file -ddump-hi }
