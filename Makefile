@@ -7,8 +7,10 @@ clean:
 .PHONY: setup
 setup:
 	stack setup $(STACK_ARGUMENTS)
-	# Avoid ExitFailure (-9) (THIS MAY INDICATE OUT OF MEMORY)
-	stack build $(STACK_ARGUMENTS) -j 1 Cabal haskell-src-exts
+	# Avoid ExitFailure (-9) (THIS MAY INDICATE OUT OF MEMORY) by building
+	# particular dependencies single-threaded.
+	stack build $(STACK_ARGUMENTS) -j 1 \
+	  Cabal haskell-src-exts $(EXTRA_J1_DEPS)
 	stack build $(STACK_ARGUMENTS) --dependencies-only --test --no-run-tests
 
 .PHONY: setup.lint

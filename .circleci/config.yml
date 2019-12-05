@@ -85,6 +85,7 @@ jobs:
       LINT: 0
       STACK_ARGUMENTS: --no-terminal --resolver nightly
       STACK_YAML: stack-nightly.yaml
+      EXTRA_J1_DEPS: JuicyPixels pandoc
 
 workflows:
   version: 2
@@ -94,14 +95,14 @@ workflows:
       - build_8.2.2
       - build_8.4.3
       - build
-      - build_nightly
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *"
-          filters:
-            branches:
-              only:
-                - master
-    jobs:
-      - build_nightly
+       #- build_nightly
+  # nightly:
+  #   triggers:
+  #     - schedule:
+  #         cron: "0 0 * * *"
+  #         filters:
+  #           branches:
+  #             only:
+  #               - master
+  #   jobs:
+  #     - build_nightly
