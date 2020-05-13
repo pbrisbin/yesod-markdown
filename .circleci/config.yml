@@ -73,6 +73,11 @@ jobs:
     environment:
       STACK_ARGUMENTS: --no-terminal
       STACK_YAML: stack-lts-12.10.yaml
+  build_8.6.5:
+    <<: *stack_build
+    environment:
+      STACK_ARGUMENTS: --no-terminal
+      STACK_YAML: stack-lts-14.27.yaml
   build:
     <<: *stack_build
     environment:
@@ -94,6 +99,7 @@ workflows:
       - build_8.0.2
       - build_8.2.2
       - build_8.4.3
+      - build_8.6.5
       - build
        #- build_nightly
   # nightly:
