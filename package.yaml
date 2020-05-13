@@ -1,5 +1,5 @@
 name: yesod-markdown
-version: 0.12.6.2
+version: 0.12.6.3
 synopsis: Tools for using markdown in a yesod application
 description: >
   A subset of Pandoc functionality useful for markdown processing in yesod
@@ -24,7 +24,7 @@ library:
   dependencies:
     - text >=0.11 && <2.0
     - bytestring >=0.9 && <0.11
-    - pandoc >=2.0 && <2.8
+    - pandoc >=2.0 && <2.10
     - blaze-html >=0.5 && <0.10
     - blaze-markup >=0.5 && <0.9
     - xss-sanitize >=0.3.1 && <0.4
