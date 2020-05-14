@@ -1,15 +1,5 @@
 # Date of last update, overridden on CI with --resolver
-resolver: nightly-2019-11-29
-extra-deps:
-  - cmark-gfm-0.2.1@sha256:f49c10f6f1f8f41cb5d47e69ad6593dc45d2b28a083bbe22926d9f5bebf479b5,5191
-  - doclayout-0.2.0.1@sha256:0410e40c4fa8e299b4f5fa03d378111b9d0effdf59134c95882a160637887ba8,2063
-  - doctemplates-0.7.2@sha256:e9a3a2182446f6f4548096d1349088144c349c504675660ab30e432af3136bda,3113
-  - haddock-library-1.8.0@sha256:9dece2cbca827755fdfc30af5a407b0ca30cf29ec1ee85215b38fd8fc23e7421,3723
-  - ipynb-0.1@sha256:5b5240a9793781da557f82891d49cea63d71c8c5d3500fa3eac9fd702046b520,1926
-  - pandoc-2.8.0.1@sha256:96a3be7666297aaf7dd71a3c57da8fd42822b26d2e09cdb73c7da2e0129a0d82,35558
-  - pandoc-types-1.20@sha256:8393b1a73b8a6a1f3feaeb3a6592c176461082c3e4d897f1b316b1a58dd84c39,3999
-  - texmath-0.12@sha256:148a7cf41aaba411a3a7b8e6995bcf7a29fc499af64b2320eb573fbd1c15d209
-allow-newer: true
+resolver: nightly-2020-05-15
 
 # Fix weeder with stack-2.0
 ghc-options: { "$locals": -ddump-to-file -ddump-hi }

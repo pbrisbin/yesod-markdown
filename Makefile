@@ -6,32 +6,26 @@ clean:
 
 .PHONY: setup
 setup:
-	stack setup $(STACK_ARGUMENTS)
-	# Avoid ExitFailure (-9) (THIS MAY INDICATE OUT OF MEMORY) by building
-	# particular dependencies single-threaded.
-	stack build $(STACK_ARGUMENTS) -j 1 \
-	  Cabal haskell-src-exts $(EXTRA_J1_DEPS)
-	stack build $(STACK_ARGUMENTS) --dependencies-only --test --no-run-tests
+	stack setup
+	stack build --dependencies-only --test --no-run-tests
 
 .PHONY: setup.lint
 setup.lint:
-	stack install $(STACK_ARGUMENTS) --copy-compiler-tool hlint weeder
+	stack install --copy-compiler-tool hlint weeder
 
 .PHONY: build
 build:
-	stack build $(STACK_ARGUMENTS) --pedantic --test --no-run-tests
+	stack build --fast --pedantic --test --no-run-tests
 
 .PHONY: test
 test:
-	stack build $(STACK_ARGUMENTS) --pedantic --test
-
+	stack build --fast --pedantic --test
 
 .PHONY: lint
 lint:
-	stack exec $(STACK_ARGUMENTS) hlint .
-	stack exec $(STACK_ARGUMENTS) weeder .
+	stack exec hlint .
+	stack exec weeder .
 
-# NB. not used on CI, more for local validation
 .PHONY: nightly
 nightly:
 	stack setup --stack-yaml stack-nightly.yaml --resolver nightly
