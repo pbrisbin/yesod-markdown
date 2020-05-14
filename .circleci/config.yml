@@ -58,11 +58,6 @@ references:
             fi
 
 jobs:
-  build_8.0.2:
-    <<: *stack_build
-    environment:
-      STACK_ARGUMENTS: --no-terminal
-      STACK_YAML: stack-lts-9.21.yaml
   build_8.2.2:
     <<: *stack_build
     environment:
@@ -96,7 +91,6 @@ workflows:
   version: 2
   commit:
     jobs:
-      - build_8.0.2
       - build_8.2.2
       - build_8.4.3
       - build_8.6.5
