@@ -20,10 +20,10 @@ references:
             git ls-files | xargs md5sum > sdigest
       - restore_cache:
           keys:
-            - v3-{{ .Branch }}-{{ checksum "rdigest" }}-{{ checksum "sdigest" }}
-            - v3-{{ .Branch }}-{{ checksum "rdigest" }}-
-            - v3-{{ .Branch }}-
-            - v3-master-
+            - v4-{{ .Branch }}-{{ checksum "rdigest" }}-{{ checksum "sdigest" }}
+            - v4-{{ .Branch }}-{{ checksum "rdigest" }}-
+            - v4-{{ .Branch }}-
+            - v4-master-
       - run:
           name: Dependencies
           command: |
@@ -41,7 +41,7 @@ references:
           command: make build
       - save_cache:
           # yamllint disable-line rule:line-length
-          key: v3-{{ .Branch }}-{{ checksum "rdigest" }}-{{ checksum "sdigest" }}
+          key: v4-{{ .Branch }}-{{ checksum "rdigest" }}-{{ checksum "sdigest" }}
           paths:
             - ~/.stack
             - ./.stack-work
