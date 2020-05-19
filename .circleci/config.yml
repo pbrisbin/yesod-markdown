@@ -1,170 +1,23 @@
 version: 2.1
 
-# {{{ Begin Local Orb
-#
-# TODO: Extract, release, use across all Haskell OSS
-#
 orbs:
-  stack-build:
-    jobs:
-      ubuntu:
-        parameters:
-          stack-yaml:
-            description: "Path to stack.yaml file to use"
-            type: string
-            default: stack.yaml
-          stack-arguments:
-            description: "Additional arguments for ALL Stack invocations"
-            type: string
-            default: ""
-          heavy-dependencies:
-            description: "Dependencies to build first, with -j 1"
-            type: string
-            default: ""
-          hlint:
-            description: "Run HLint?"
-            type: boolean
-            default: true
-          weeder:
-            description: "Run Weeder?"
-            type: boolean
-            default: true
-          cache-epoch:
-            description: "Prefix used for all cache keys"
-            type: integer
-            default: 1
-        machine:
-          image: ubuntu-1604:201903-01
-        steps:
-          - checkout
-          - run:
-              name: Install Stack
-              command: curl -sSL https://get.haskellstack.org/ | sh
-          - run:
-              name: Digest
-              command: |
-                # TODO: once committing the cabal file catches on, we can just
-                # assume it exists and md5sum *.cabal here.
-                find . -maxdepth 1 -type f \
-                  -name package.yaml -name '*.cabal' \
-                  -exec md5sum {} + > project.digest
-
-                git ls-files | xargs md5sum > source.digest
-          - restore_cache:
-              keys:
-                - v<<parameters.cache-epoch>>-dependencies-{{ checksum "<<parameters.stack-yaml>>" }}-{{ checksum "project.digest" }}
-                - v<<parameters.cache-epoch>>-dependencies-{{ checksum "<<parameters.stack-yaml>>" }}-
-          - when:
-              condition: <<parameters.heavy-dependencies>>
-              steps:
-                - run:
-                    # Build single-threaded first, to avoid out of memory
-                    name: Build heavy dependencies
-                    command: stack build -j 1
-                      --stack-yaml "<<parameters.stack-yaml>>"
-                      --no-terminal
-                      <<parameters.stack-arguments>>
-                      <<parameters.heavy-dependencies>>
-          - run:
-              name: Build dependencies
-              command: stack build
-                --stack-yaml "<<parameters.stack-yaml>>"
-                --no-terminal
-                <<parameters.stack-arguments>>
-                --dependencies-only
-                --bench
-                --no-run-benchmarks
-                --test
-                --no-run-tests
-          - when:
-              condition: <<parameters.hlint>>
-              steps:
-                - run:
-                    name: Install HLint
-                    command: stack install
-                      --stack-yaml "<<parameters.stack-yaml>>"
-                      --no-terminal
-                      <<parameters.stack-arguments>>
-                      --copy-compiler-tool hlint weeder
-          - when:
-              condition: <<parameters.weeder>>
-              steps:
-                - run:
-                    name: Install Weeder
-                    command: stack install
-                      --stack-yaml "<<parameters.stack-yaml>>"
-                      --no-terminal
-                      <<parameters.stack-arguments>>
-                      --copy-compiler-tool weeder
-          - save_cache:
-              key: v<<parameters.cache-epoch>>-dependencies-{{ checksum "<<parameters.stack-yaml>>" }}-{{ checksum "project.digest" }}
-              paths:
-                - ~/.stack
-                - ./.stack-work
-          - restore_cache:
-              keys:
-                - v<<parameters.cache-epoch>>-{{ checksum "<<parameters.stack-yaml>>" }}-{{ checksum "project.digest" }}-{{ checksum "source.digest" }}
-                - v<<parameters.cache-epoch>>-{{ checksum "<<parameters.stack-yaml>>" }}-{{ checksum "project.digest" }}
-                - v<<parameters.cache-epoch>>-{{ checksum "<<parameters.stack-yaml>>" }}-
-          - run:
-              name: Build
-              command: stack build
-                --stack-yaml "<<parameters.stack-yaml>>"
-                --no-terminal
-                <<parameters.stack-arguments>>
-                --pedantic
-                --test
-                --no-run-tests
-          - save_cache:
-              key: v<<parameters.cache-epoch>>-{{ checksum "<<parameters.stack-yaml>>" }}-{{ checksum "project.digest" }}-{{ checksum "source.digest" }}
-              paths:
-                - ./.stack-work
-          - run:
-              name: Test
-              command: stack build
-                --stack-yaml "<<parameters.stack-yaml>>"
-                --no-terminal
-                <<parameters.stack-arguments>>
-                --pedantic
-                --test
-          - when:
-              condition: <<parameters.hlint>>
-              steps:
-                - run:
-                    name: HLint
-                    command: stack exec
-                      --stack-yaml "<<parameters.stack-yaml>>"
-                      --no-terminal
-                      hlint .
-          - when:
-              condition: <<parameters.weeder>>
-              steps:
-                - run:
-                    name: Weeder
-                    command: stack exec
-                      --stack-yaml "<<parameters.stack-yaml>>"
-                      --no-terminal
-                      weeder .
-                    environment:
-                      STACK_YAML: <<parameters.stack-yaml>>
-# }}} END Orb
+  stack-build: pbrisbin/stack-build@1.0.0
 
 workflows:
   commit:
     jobs:
-      - stack-build/ubuntu:
+      - stack-build/build-test-lint:
           name: "default"
-      - stack-build/ubuntu:
+      - stack-build/build-test-lint:
           name: "ghc-8.8.3 / lts-15.12"
           stack-yaml: stack-lts-15.12.yaml
-      - stack-build/ubuntu:
+      - stack-build/build-test-lint:
           name: "ghc-8.6.5 / lts-14.27"
           stack-yaml: stack-lts-14.27.yaml
-      - stack-build/ubuntu:
+      - stack-build/build-test-lint:
           name: "ghc-8.4.3 / lts-12.10"
           stack-yaml: stack-lts-12.10.yaml
-
-      - stack-build/ubuntu:
+      - stack-build/build-test-lint:
           name: "nightly"
           stack-yaml: stack-nightly.yaml
           stack-arguments: --resolver nightly
@@ -180,7 +33,7 @@ workflows:
               only:
                 - master
     jobs:
-      - stack-build/ubuntu:
+      - stack-build/build-test-lint:
           name: "nightly"
           stack-yaml: stack-nightly.yaml
           stack-arguments: --resolver nightly
