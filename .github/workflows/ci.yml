@@ -25,7 +25,7 @@ jobs:
           ./.stack-work
         key: ${{ runner.os }}-${{ hashFiles(matrix.stack-yaml) }}-${{ hashFiles('*.cabal') }}
         restore-keys: |
-          ${{ runner.os }}-${{ hashFiles(matrix.stack.yaml) }}-
+          ${{ runner.os }}-${{ hashFiles(matrix.stack-yaml) }}-
           ${{ runner.os }}-
     - uses: freckle/stack-action@main
       with:
