@@ -18,17 +18,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - run:
-        cp "${{ matrix.stack-yaml }}" /tmp/cache.key
     - uses: actions/cache@v2
       with:
         path: |
           ~/.stack
           ./.stack-work
-        key: ${{ runner.os }}-${{ hashFiles('/tmp/cache.key') }}-${{ hashFiles('*.cabal') }}
+        key: ${{ runner.os }}-${{ hashFiles(matrix.stack-yaml) }}-${{ hashFiles('*.cabal') }}
         restore-keys: |
-          ${{ runner.os }}-${{ hashFiles('/tmp/cache.key') }}-
+          ${{ runner.os }}-${{ hashFiles(matrix.stack.yaml) }}-
           ${{ runner.os }}-
     - uses: freckle/stack-action@main
       with:
-        stack-yaml: matrix.stack-yaml
+        stack-yaml: ${{ matrix.stack-yaml }}
