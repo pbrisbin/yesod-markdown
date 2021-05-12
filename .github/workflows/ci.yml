@@ -18,15 +18,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v2
+    - uses: freckle/stack-cache-action@main
       with:
-        path: |
-          ~/.stack
-          ./.stack-work
-        key: ${{ runner.os }}-${{ hashFiles(matrix.stack-yaml) }}-${{ hashFiles('*.cabal') }}
-        restore-keys: |
-          ${{ runner.os }}-${{ hashFiles(matrix.stack-yaml) }}-
-          ${{ runner.os }}-
+        stack-yaml: ${{ matrix.stack-yaml }}
     - uses: freckle/stack-action@main
       with:
         stack-yaml: ${{ matrix.stack-yaml }}

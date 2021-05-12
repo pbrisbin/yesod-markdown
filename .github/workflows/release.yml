@@ -1,9 +1,8 @@
-name: Release to Hackage
+name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches: main
 
 jobs:
   release:
@@ -12,6 +11,13 @@ jobs:
       HACKAGE_API_KEY: ${{ secrets.HACKAGE_API_KEY }}
     steps:
       - uses: actions/checkout@v2
-      - uses: freckle/stack-upload-action@main
+
+      - id: tag
+        uses: freckle/haskell-tag-action@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - if: steps.tag.outputs.tag
+        uses: freckle/stack-upload-action@main
         with:
           pvp-bounds: both
