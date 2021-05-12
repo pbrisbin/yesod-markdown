@@ -1,6 +1,10 @@
-## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.10...main)
+## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.11...main)
 
 None
+
+## [v0.12.6.11](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.10...v0.12.6.11)
+
+Released without changes, to test release automation.
 
 ## [v0.12.6.10](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.9...v0.12.6.10)
 
