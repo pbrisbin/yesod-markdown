@@ -20,4 +20,4 @@ jobs:
       - if: steps.tag.outputs.tag
         uses: freckle/stack-upload-action@main
         with:
-          pvp-bounds: both
+          pvp-bounds: lower

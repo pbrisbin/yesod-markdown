@@ -1,6 +1,10 @@
-## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.9...main)
+## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.10...main)
 
 None
+
+## [v0.12.6.10](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.9...v0.12.6.10)
+
+- Remove all dependencies upper bounds
 
 ## [v0.12.6.9](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.8...v0.12.6.9)
 
