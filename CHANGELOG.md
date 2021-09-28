@@ -1,6 +1,10 @@
-## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.11...main)
+## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.12...main)
 
 None
+
+## [v0.12.6.12](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.11...v0.12.6.12)
+
+- Relax test assertion for change in xss-sanitize behavior.
 
 ## [v0.12.6.11](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.10...v0.12.6.11)
 
