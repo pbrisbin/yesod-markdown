@@ -29,7 +29,9 @@ spec = describe "Yesod.Markdown" $ do
 
         let Right html = markdownToHtml markdown
 
-        let rendered = renderHtml html
+        -- Trim tag linebreaks due to non-functional difference in newer version
+        -- of xss or pandoc library.
+        let rendered = TL.replace ">\n<" "><" $ renderHtml html
             expectedPrefix = mconcat
                 [ "<h1 id=\"title\">Title</h1>"
                 , "<ul>"
@@ -58,7 +60,7 @@ spec = describe "Yesod.Markdown" $ do
 
         let Right html = markdownToHtmlTrusted markdown
 
-        renderHtml html `shouldBe` TL.concat
+        TL.replace ">\n<" "><" (renderHtml html) `shouldBe` TL.concat
             [ "<h1 id=\"title\">Title</h1>"
             , "<ul>"
             , "<li>one</li>"
