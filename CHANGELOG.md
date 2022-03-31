@@ -1,6 +1,10 @@
-## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.12...main)
+## [_Unreleased_](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.13...main)
 
 None
+
+## [v0.12.6.13](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.12...v0.12.6.13)
+
+- Support GHCs 9.0 and 9.2
 
 ## [v0.12.6.12](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.11...v0.12.6.12)
 
