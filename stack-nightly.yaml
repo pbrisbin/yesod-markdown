@@ -1,8 +1,8 @@
 # Date of last update, overridden on CI with --resolver
-resolver: nightly-2022-03-30
+resolver: nightly-2022-12-12
 
 extra-deps:
-  - pandoc-2.17.1.1
+  - pandoc-2.19.2
 
 # needed to allow newer hslua-* for pandoc
 allow-newer: true
