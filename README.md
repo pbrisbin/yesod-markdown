@@ -1,5 +1,10 @@
 # Yesod Markdown
 
+[![Hackage](https://img.shields.io/hackage/v/yesod-markdown.svg?style=flat)](https://hackage.haskell.org/package/yesod-markdown)
+[![Stackage Nightly](http://stackage.org/package/yesod-markdown/badge/nightly)](http://stackage.org/nightly/package/yesod-markdown)
+[![Stackage LTS](http://stackage.org/package/yesod-markdown/badge/lts)](http://stackage.org/lts/package/shellwords)
+[![CI](https://github.com/pbrisbin/yesod-markdown/actions/workflows/ci.yml/badge.svg)](https://github.com/pbrisbin/yesod-markdown/actions/workflows/ci.yml)
+
 A small wrapper over [Pandoc][]'s powerful `Markdown -> Html` support, with
 usage tailored for Yesod.
 
