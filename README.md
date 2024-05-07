@@ -26,7 +26,7 @@ getPageR fp = do
             |]
 ```
 
-The default extensions are minimal, you can specify you're preferred
+The default extensions are minimal, you can specify your preferred
 [extensions][] with `markdownToHtmlWithExtensions`:
 
 [extensions]: http://hackage.haskell.org/package/pandoc/docs/Text-Pandoc-Extensions.html
