@@ -1,13 +1,13 @@
 cabal-version: 1.18
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.36.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1184030098e5ccf7ba85d33605e0508ac673e1f932f7cb0cf4af17cf47cf4b6a
+-- hash: c8a362f610442446863afcf85ee672d591894010dc025aacc2fb2b78dbed9a9a
 
 name:           yesod-markdown
-version:        0.12.6.13
+version:        0.12.6.14
 synopsis:       Tools for using markdown in a yesod application
 description:    A subset of Pandoc functionality useful for markdown processing in yesod applications
 category:       Web, Yesod
