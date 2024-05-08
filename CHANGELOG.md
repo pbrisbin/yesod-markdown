@@ -3,8 +3,9 @@
 ## [v0.12.6.14](https://github.com/pbrisbin/yesod-markdown/compare/v0.12.6.13...v0.12.6.14)
 
 - Change GHC Support
-    - Add 9.4, 9.6, and 9.8
-    - Drop 8.4
+
+  - Add 9.4, 9.6, and 9.8
+  - Drop 8.4
 
   NOTE: Things may still compile on versions not present here. These are just
   the versions we test with on CI.
